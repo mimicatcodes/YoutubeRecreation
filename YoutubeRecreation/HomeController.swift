@@ -21,9 +21,12 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         titleLabel.text = "Home"
         titleLabel.font = UIFont.systemFont(ofSize: 20)
         titleLabel.textColor = UIColor.white
-       
-//        collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cellId")
+
         collectionView?.register(videoCell.self, forCellWithReuseIdentifier: "cellId")
+        
+        // Locate video cells under the menuBar
+        collectionView?.contentInset = UIEdgeInsetsMake(50, 0, 0, 0)
+        collectionView?.scrollIndicatorInsets = UIEdgeInsetsMake(50, 0, 0, 0)
         
         setupMenuBar()
     }
