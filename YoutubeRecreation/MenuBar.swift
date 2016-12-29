@@ -21,17 +21,22 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     }()
     
     let cellId = "cellId"
+    let imageNames = ["icon4", "icon1", "icon2", "icon3"]
     
     override init(frame: CGRect) {
         super.init(frame:frame)
         
         // Register Cell Class
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.register(MenuCell.self, forCellWithReuseIdentifier: cellId)
         addSubview(collectionView)
         
         addConstraintsWithFormat(format: "H:|[v0]|", views: collectionView)
         addConstraintsWithFormat(format: "V:|[v0]|", views: collectionView)
- 
+        
+        // preselect menu item
+        let selectedIndexPath = IndexPath(item: 0, section: 0)
+        collectionView.selectItem(at: selectedIndexPath, animated: true, scrollPosition: .bottom)
+
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -39,8 +44,9 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
-        cell.backgroundColor = UIColor.blue
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! MenuCell
+        cell.imageView.image = UIImage(named:imageNames[indexPath.item])?.withRenderingMode(.alwaysTemplate)
+        cell.tintColor = UIColor.rgb(r: 91, g: 14, b: 13)
         return cell
     }
     
@@ -62,17 +68,37 @@ class MenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UIC
     }
 }
 
-class MenuCell: UICollectionViewCell {
-    override init(frame: CGRect){
-        super.init(frame: frame)
-        setupViews()
+class MenuCell: BaseCell {
+    
+    let imageView : UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "icon1")?.withRenderingMode(.alwaysTemplate)
+        return imageView
+    }()
+    
+    override var isHighlighted: Bool{
+        didSet {
+            imageView.tintColor = isHighlighted ? UIColor.white : UIColor.rgb(r: 91, g: 14, b: 13)
+        }
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    override var isSelected: Bool{
+        didSet {
+            imageView.tintColor = isSelected ? UIColor.white : UIColor.rgb(r: 91, g: 14, b: 13)
+        }
     }
     
-    func setupViews(){
+    
+    override func setupViews(){
+        super.setupViews()
         
+        addSubview(imageView)
+        addConstraintsWithFormat(format: "H:[v0(28)]", views: imageView)
+        addConstraintsWithFormat(format: "V:[v0(28)]", views: imageView)
+
+        // Position constraints for menu bar items
+        addConstraint(NSLayoutConstraint(item: imageView, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
+        addConstraint(NSLayoutConstraint(item: imageView, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0))
     }
+   
 }

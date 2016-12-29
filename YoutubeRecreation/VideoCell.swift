@@ -8,15 +8,22 @@
 
 import UIKit
 
-class videoCell: UICollectionViewCell {
+class BaseCell: UICollectionViewCell {
     override init(frame: CGRect) {
-        super.init(frame:frame)
+        super.init(frame: frame)
         setupViews()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func setupViews(){
+        
+    }
+}
+
+class videoCell: BaseCell {
     
     let thumbnailImageView: UIImageView = {
         let imageView = UIImageView()
@@ -61,7 +68,7 @@ class videoCell: UICollectionViewCell {
         return textView
     }()
     
-    func setupViews() {
+    override func setupViews() {
         
         // -- Autolayout Contraints for different devices
         addSubview(thumbnailImageView)
